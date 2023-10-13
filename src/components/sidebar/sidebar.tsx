@@ -2,6 +2,8 @@ import React from "react";
 import { useState } from "react";
 import Login from "./auth/login";
 import SignUp from "./auth/signup";
+import { Link } from "react-router-dom";
+
 
 const Sidebar = () => {
     const [loginCard , setLoginCard] = useState(false); 
@@ -53,12 +55,12 @@ const Sidebar = () => {
                 </div>
 
                 <div className="ml-[10%] mt-[30%] flex flex-col justify-center gap-3    text-white">
-                   <div onClick={handleSignUpBtn} className="font-medium text-xl cursor-pointer hover:text-[#ccc8c8]">
-                        SignUp
+                   <div className="font-medium text-xl cursor-pointer hover:text-[#ccc8c8]">
+                   <Link to="register">SignUp</Link>
                    </div>
                    {signUpCard && <SignUp/>}
-                    <div  onClick={handleLoginBtn} className="font-medium text-xl cursor-pointer hover:text-[#ccc8c8]">
-                        Login
+                    <div   className="font-medium text-xl cursor-pointer hover:text-[#ccc8c8]">
+                        <Link to="login">Login</Link>
                     </div>
                     {loginCard && <Login/>}
                     <div className="font-medium text-xl cursor-pointer hover:text-[#ccc8c8]">
