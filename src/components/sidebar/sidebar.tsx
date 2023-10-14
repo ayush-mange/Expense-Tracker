@@ -1,31 +1,11 @@
 import React from "react";
-import { useState } from "react";
-import Login from "./auth/login";
-import SignUp from "./auth/signup";
+// import { useState } from "react";
+// import Login from "./auth/login";
+// import SignUp from "./auth/signup";
 import { Link } from "react-router-dom";
 
 
 const Sidebar = () => {
-    const [loginCard , setLoginCard] = useState(false); 
-    const [signUpCard , setSignUpCard] = useState(false); 
-
-    
-    const handleLoginBtn = () => {
-        if (loginCard) {
-            setLoginCard(false)
-        }else{
-            setLoginCard(true)
-        }
-    }
-
-    const handleSignUpBtn = () => {
-        if (signUpCard) {
-            setSignUpCard(false)
-        }else{
-            setSignUpCard(true)
-        }
-    }
-
 
     return(
         <>
@@ -37,7 +17,7 @@ const Sidebar = () => {
                 <div className="mt-[5%] cursor-pointer p-8">
                 <>
                 <li className={`text-white h-12 flex flex-row items-center gap-6 p-5 rounded-xl font-medium text-base hover:text-lg` }> 
-                    Home
+                    <Link to="/">Home</Link>
                 </li>
                 <li className={` text-white h-12 flex flex-row items-center gap-6 p-5 rounded-xl font-medium text-base  hover:text-lg` }>
                     Expense
@@ -58,11 +38,9 @@ const Sidebar = () => {
                    <div className="font-medium text-xl cursor-pointer hover:text-[#ccc8c8]">
                    <Link to="register">SignUp</Link>
                    </div>
-                   {signUpCard && <SignUp/>}
                     <div   className="font-medium text-xl cursor-pointer hover:text-[#ccc8c8]">
                         <Link to="login">Login</Link>
                     </div>
-                    {loginCard && <Login/>}
                     <div className="font-medium text-xl cursor-pointer hover:text-[#ccc8c8]">
                         Logout
                     </div>
