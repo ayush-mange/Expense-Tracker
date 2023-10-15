@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useUserAuth } from "../../../context/UserAuthContext";
 
 interface ExpenseCardProps{
     setExpenseCard : React.Dispatch<React.SetStateAction<boolean>>;
@@ -13,6 +14,13 @@ interface FormData {
 const Categories: string[] = ["Food" , "Clothing" , "Travel"];
 
 const ExpenseCard:React.FC<ExpenseCardProps> = ({setExpenseCard}) => {
+    const {user} = useUserAuth(); 
+    const[uid , setUID] = useState("")
+
+    useEffect(()=>{
+        setUID(user.uid)
+    },[])
+    
 
     const[ formData , setFormData ] = useState<FormData>({
         text: "",
@@ -28,10 +36,63 @@ const ExpenseCard:React.FC<ExpenseCardProps> = ({setExpenseCard}) => {
         }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log(formData);
+        // console.log(formData);
+        //  console.log(user.uid);
+        
+         const now = new Date();
+         const options: Intl.DateTimeFormatOptions = {
+            timeZone: "Asia/Kolkata",
+            hour12: false, 
+            hour: "2-digit",
+            minute: "2-digit",
+        };
+
+        const dateOptions: Intl.DateTimeFormatOptions = {
+            timeZone: "Asia/Kolkata",
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+          };
+
+      const time = new Intl.DateTimeFormat("en-IN", options).format(now);
+      const date = new Intl.DateTimeFormat("en-IN", dateOptions).format(now);
+    //   console.log(formattedTime);
+    //   console.log(formattedDate);
+      
+      
+        
+        const { text , category , amount } = formData;
+        
+        const res = await fetch(
+            "https://savesphere-a38d8-default-rtdb.asia-southeast1.firebasedatabase.app/RecentHistory.json",
+            {
+                method:  "POST",
+                headers: {
+                "Content-type" : "application/json",
+                },
+                body: JSON.stringify({
+                    text,
+                    category,
+                    amount,
+                    date,
+                    time,
+                    uid
+                }),
+            }
+        );
+
+
+        if(res){
+            alert("data stored")
+        }else{
+            alert("pls fill the data")
+        }
+
         setExpenseCard(false);
+
+
     };
 
     return(<>

@@ -1,14 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useUserAuth } from "../../context/UserAuthContext";
 import ExpenseCard from "../../components/sidebar/card/expense-card";
 import IncomeCard from "../../components/sidebar/card/income-card";
-// import Sidebar from "../../components/sidebar/sidebar";
+import HistoryTable from "../../components/table/history-table";
+// import { database } from "../../firebase/fb-config";
+// import {app} from "../../firebase/fb-config";
+import { ref , onValue } from "firebase/database"
+
+
 
 const Home = () => {
     const { user } = useUserAuth();
-    // console.log(user.email);
     const[ expenseCard , setExpenseCard ]   = useState<boolean>(false);
     const[ incomeCard , setIncomeCard ]     = useState(false);
+    const [data, setData] = useState(null);
+
+
+
+    const mockData = [{time:"12:45" , date:"15-10-2023" , text:"Expense" , category:"food",amount:"1200"}]
     
     const handleExpense = () => {
         if(expenseCard){
@@ -24,16 +33,14 @@ const Home = () => {
             setIncomeCard(true)
         }
     }
-    // console.log(incomeCard);
-    // console.log(expenseCard);
-    
-    
+
+
 
     return(
         <div id="home-header">
             <div className="flex justify-between items-center ">
                 <div className="text-2xl font-semibold text-white ">Dashboard</div>
-                <div className="text-white text-sm font-normal">{user.email}</div>
+                <div className="text-white text-sm font-normal">{user?.email}</div>
             </div>
             <div id="container" className="mt-[3%] flex flex-col gap-4 justify-center">
                 <div id="top" className="w-[99%] ">
@@ -81,6 +88,9 @@ const Home = () => {
                 <div id="history" className="w-[99%] h-[200px] ">
                     <div className="bg-[rgb(48,48,48)] w-[100%] h-max p-3">
                     <p className="text-white text-lg font-medium">History : </p>
+                    <div>
+                        <HistoryTable expensesData={mockData}/>
+                    </div>
                     </div>
 
                 </div>

@@ -3,10 +3,18 @@ import React from "react";
 // import Login from "./auth/login";
 // import SignUp from "./auth/signup";
 import { Link } from "react-router-dom";
-
+import { useUserAuth } from "../../context/UserAuthContext";
 
 const Sidebar = () => {
+const { logout } = useUserAuth();
 
+    const handleLogout =async () => {
+    try {
+        await logout();
+    } catch (error) {
+        
+    }
+}
     return(
         <>
         <div className="bg-[#303030] w-[20%] overflow-y-auto h-[100%] fixed text-custom-dark flex flex-col">
@@ -41,7 +49,7 @@ const Sidebar = () => {
                     <div   className="font-medium text-xl cursor-pointer hover:text-[#ccc8c8]">
                         <Link to="login">Login</Link>
                     </div>
-                    <div className="font-medium text-xl cursor-pointer hover:text-[#ccc8c8]">
+                    <div className="font-medium text-xl cursor-pointer hover:text-[#ccc8c8]" onClick={handleLogout}>
                         Logout
                     </div>
                     
