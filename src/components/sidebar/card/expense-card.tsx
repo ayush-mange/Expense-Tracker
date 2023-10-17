@@ -20,6 +20,7 @@ const ExpenseCard:React.FC<ExpenseCardProps> = ({setExpenseCard}) => {
     const {user} = useUserAuth(); 
     const[uid , setUID] = useState("")
     const value = collection(database,"Expense");
+    const val = collection(database,"History")
 
 
     useEffect(()=>{
@@ -96,7 +97,9 @@ const ExpenseCard:React.FC<ExpenseCardProps> = ({setExpenseCard}) => {
         }
 
         // Firestore Database
-        await addDoc(value,{text:text , category: category , amount: amount})
+        await addDoc(value,{text:text , category: category , amount: amount});
+        await addDoc(val,{text:text , category: category , amount: amount});
+
 
         setExpenseCard(false);
 

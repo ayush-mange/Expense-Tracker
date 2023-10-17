@@ -35,7 +35,7 @@ const Home = () => {
     const[ expenseCard , setExpenseCard ]   = useState<boolean>(false);
     const[ incomeCard , setIncomeCard ]     = useState<boolean>(false);
     const[ realDB , setRealDB ]             = useState<YourData[]>([]);
-    const value = collection(database,"Expense");
+    const value = collection(database,"History");
 
     // const val = collection(realtimeDB,"Expense");
 

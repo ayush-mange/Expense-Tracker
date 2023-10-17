@@ -17,13 +17,16 @@ function App() {
         <Layout>
         <Routes>
           <Route path='/' element={<Home/>}/>
-          <Route path='/login' element={<Login/>}/>
-          <Route path='/register' element={<SignUp/>}/>
+          
           <Route path='/expense' element={<Expenses/>}/>
           <Route path='/income' element={<Income/>}/>
 
         </Routes>
         </Layout>
+        <Routes>
+        <Route path='/login' element={<Login/>}/>
+          <Route path='/register' element={<SignUp/>}/>
+        </Routes>
       </UserAuthContextProvider>
     </div>
   );

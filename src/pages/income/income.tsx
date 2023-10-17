@@ -30,7 +30,7 @@ interface YourData {
 const Income = () => {
     const { user } = useUserAuth();
     const[ data , setData ] = useState<YourData[]> ([])
-    const value = collection(database,"Expense");
+    const value = collection(database,"Income");
 
     console.log(user);
     
@@ -69,7 +69,7 @@ const Income = () => {
     return(
         <div id="history" className="w-[99%] h-[200px] ">
                     <div className="bg-[rgb(48,48,48)] w-[100%] h-max p-3">
-                    <p className="text-white text-lg font-medium mb-[2%]">Expense History : </p>
+                    <p className="text-white text-lg font-medium mb-[2%]">Income History : </p>
                     <div>
                         <ExpenseTable expensesData={transformedData}/>
                     </div>

@@ -1,5 +1,7 @@
 import React from "react";
 import { useState } from "react";
+import { database } from "../../../firebase/fb-config";
+import { addDoc, collection } from "firebase/firestore";
 
 interface IncomeCardProps {
     setIncomeCard : React.Dispatch<React.SetStateAction<boolean>>;
@@ -15,6 +17,10 @@ const Categories: string[] = ["Salary" , "Mutual Fund" , "Trading" , "Insurance"
 
 const IncomeCard: React.FC<IncomeCardProps> = ({setIncomeCard}) => {
 
+    const value = collection(database,"Income");
+    const val = collection(database,"History")
+
+
     const[ formData , setFormData ] = useState<FormData>({
         text: "",
         amount: 0,
@@ -29,10 +35,17 @@ const IncomeCard: React.FC<IncomeCardProps> = ({setIncomeCard}) => {
         }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         console.log(formData);
         setIncomeCard(false);
+        
+        const { text , category , amount } = formData;
+
+        // Firestore Database
+        await addDoc(value,{text:text , category: category , amount: amount});
+        await addDoc(val,{text:text , category: category , amount: amount});
+
     };
 
 

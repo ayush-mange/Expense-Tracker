@@ -31,11 +31,11 @@ const { logout } = useUserAuth();
                    <Link to="/expense">Expense</Link> 
                 </li>
                 <li className={` text-white h-12 flex flex-row items-center gap-6 p-5 rounded-xl font-medium text-base   hover:text-lg` }>
-                    Income
+                    <Link to="/income">Income</Link>
                 </li>
-                <li className={` text-white h-12 flex flex-row items-center gap-6 p-5 rounded-xl font-medium text-base  hover:text-lg` }>
+                {/* <li className={` text-white h-12 flex flex-row items-center gap-6 p-5 rounded-xl font-medium text-base  hover:text-lg` }>
                     Analytics
-                </li>  
+                </li>   */}
                 <li className={` text-white h-12 flex flex-row items-center gap-6 p-5 rounded-xl font-medium text-base   hover:text-lg` }>
                     Contact Us
                 </li>  
