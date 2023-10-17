@@ -28,7 +28,7 @@ const { logout } = useUserAuth();
                     <Link to="/">Home</Link>
                 </li>
                 <li className={` text-white h-12 flex flex-row items-center gap-6 p-5 rounded-xl font-medium text-base  hover:text-lg` }>
-                    Expense
+                   <Link to="/expense">Expense</Link> 
                 </li>
                 <li className={` text-white h-12 flex flex-row items-center gap-6 p-5 rounded-xl font-medium text-base   hover:text-lg` }>
                     Income

@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useUserAuth } from "../../../context/UserAuthContext";
+import { database } from "../../../firebase/fb-config";
+import { addDoc, collection } from "firebase/firestore";
+
 
 interface ExpenseCardProps{
     setExpenseCard : React.Dispatch<React.SetStateAction<boolean>>;
@@ -16,6 +19,8 @@ const Categories: string[] = ["Food" , "Clothing" , "Travel"];
 const ExpenseCard:React.FC<ExpenseCardProps> = ({setExpenseCard}) => {
     const {user} = useUserAuth(); 
     const[uid , setUID] = useState("")
+    const value = collection(database,"Expense");
+
 
     useEffect(()=>{
         setUID(user.uid)
@@ -89,6 +94,9 @@ const ExpenseCard:React.FC<ExpenseCardProps> = ({setExpenseCard}) => {
         }else{
             alert("pls fill the data")
         }
+
+        // Firestore Database
+        await addDoc(value,{text:text , category: category , amount: amount})
 
         setExpenseCard(false);
 

@@ -12,7 +12,7 @@ interface HistoryTableProps {
     expensesData : Expense[];
 }
 
-const HistoryTable:React.FC<HistoryTableProps> = ({expensesData}) => {
+const ExpenseTable:React.FC<HistoryTableProps> = ({expensesData}) => {
 
     // Reversing the Expense Data
     // const reverseData: Expense[] = expensesData.reverse();
@@ -45,4 +45,4 @@ const HistoryTable:React.FC<HistoryTableProps> = ({expensesData}) => {
     )
 } 
 
-export default HistoryTable;
+export default ExpenseTable;

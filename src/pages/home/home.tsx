@@ -3,21 +3,86 @@ import { useUserAuth } from "../../context/UserAuthContext";
 import ExpenseCard from "../../components/sidebar/card/expense-card";
 import IncomeCard from "../../components/sidebar/card/income-card";
 import HistoryTable from "../../components/table/history-table";
-// import { database } from "../../firebase/fb-config";
+import { database , realtimeDB } from "../../firebase/fb-config";
+import { collection, getDocs } from "firebase/firestore";
+import { get, ref } from "firebase/database";
 // import {app} from "../../firebase/fb-config";
-import { ref , onValue } from "firebase/database"
+// import { ref , onValue } from "firebase/database"
 
+interface Expense {
+    time: string;
+    date: string;
+    text: string;
+    category: string;
+    amount: number | string;
+  }
+
+
+interface YourData {
+    id: string;
+    text: string;
+    date: string;
+    category: string;
+    amount: number | string;
+
+
+    // Define other properties of your data here
+  }
 
 
 const Home = () => {
     const { user } = useUserAuth();
     const[ expenseCard , setExpenseCard ]   = useState<boolean>(false);
-    const[ incomeCard , setIncomeCard ]     = useState(false);
-    const [data, setData] = useState(null);
+    const[ incomeCard , setIncomeCard ]     = useState<boolean>(false);
+    const[ realDB , setRealDB ]             = useState<YourData[]>([]);
+    const value = collection(database,"Expense");
 
+    // const val = collection(realtimeDB,"Expense");
 
+    const[ data , setData ] = useState<YourData[]> ([])
 
-    const mockData = [{time:"12:45" , date:"15-10-2023" , text:"Expense" , category:"food",amount:"1200"}]
+    // FireStore
+    useEffect(()=>{
+        const getData = async()=>{
+            const dbData = await getDocs(value);
+            setData(dbData.docs.map(doc=>({...doc.data(),id:doc.id})) as YourData[])
+        }
+        getData();
+        console.log(data);
+    },[])
+
+    useEffect(()=>{
+        setInterval(() => {
+                console.log(data);
+                
+        }, 8000 );
+    }, [])
+    // RealTime
+    // useEffect(()=>{
+    //     const fetchData = async() =>{
+    //         const DbRef = ref(realtimeDB, "RecentHistory")
+    //         const snapshot = await get(DbRef)
+        
+    //         if (snapshot.exists()) {
+    //             const fetchedData: YourData[] = [];
+    //             snapshot.forEach((childSnapshot)=>{
+    //                 fetchedData.push({
+    //                     id: childSnapshot.key,
+    //                 })
+    //             })
+    //             setRealDB(fetchedData)
+    //         }else{
+    //             console.log("empty array");
+                
+    //         }
+    //     }
+    //     fetchData();
+    //     console.log(realDB);
+        
+    // },[])
+    
+
+    // const mockData = [{time:"12:45" , date:"15-10-2023" , text:"Expense" , category:"food",amount:"1200"}]
     
     const handleExpense = () => {
         if(expenseCard){
@@ -34,6 +99,20 @@ const Home = () => {
         }
     }
 
+    
+    const transformedData: Expense[] = data.map(item => {
+        return {
+            id: item.id,
+            text: item.text,
+            date: item.date,
+            category: item.category,
+            amount: item.amount,
+            time: "12:45", // You might need to set a default or extract the 'time' value from somewhere
+        };
+    });
+
+    console.log(transformedData);
+    
 
 
     return(
@@ -89,7 +168,7 @@ const Home = () => {
                     <div className="bg-[rgb(48,48,48)] w-[100%] h-max p-3">
                     <p className="text-white text-lg font-medium">History : </p>
                     <div>
-                        <HistoryTable expensesData={mockData}/>
+                        <HistoryTable expensesData={transformedData}/>
                     </div>
                     </div>
 
