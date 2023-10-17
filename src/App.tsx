@@ -8,6 +8,7 @@ import Login from './components/sidebar/auth/login';
 import SignUp from './components/sidebar/auth/signup';
 import Layout from './layout';
 import Expenses from './pages/expense/expense';
+import Income from './pages/income/income';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path='/login' element={<Login/>}/>
           <Route path='/register' element={<SignUp/>}/>
           <Route path='/expense' element={<Expenses/>}/>
+          <Route path='/income' element={<Income/>}/>
 
         </Routes>
         </Layout>
