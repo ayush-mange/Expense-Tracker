@@ -1,21 +1,25 @@
 import React from "react";
 
-interface Expense {
+interface Income {
     time: string;
     date: string;
     text: string;
     category: string;
     amount: number | string;
+    income: number | string;
   }
 
 interface HistoryTableProps {
-    expensesData : Expense[];
+    incomeData : Income[];
 }
 
-const HistoryTable:React.FC<HistoryTableProps> = ({expensesData}) => {
+const HistoryTable:React.FC<HistoryTableProps> = ({incomeData}) => {
 
     // Reversing the Expense Data
     // const reverseData: Expense[] = expensesData.reverse();
+
+    console.log(incomeData);
+    
     
     return(
         <>
@@ -30,13 +34,13 @@ const HistoryTable:React.FC<HistoryTableProps> = ({expensesData}) => {
                     </tr>
                 </thead>
                 <tbody className="text-white text-sm text-center">
-                    {expensesData.reverse().map((income, index) => (
+                    {incomeData.reverse().map((income, index) => (
                         <tr key={index}>
                             <td>{income?.time}</td>
                             <td>{income?.date}</td>
                             <td>{income?.text}</td>
                             <td>{income?.category}</td>
-                            <td>&#8377;{income?.amount}</td>
+                            <td>&#8377;{income?.income}</td>
                         </tr>
                     ))}
                 </tbody>

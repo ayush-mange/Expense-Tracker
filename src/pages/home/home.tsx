@@ -4,8 +4,9 @@ import ExpenseCard from "../../components/sidebar/card/expense-card";
 import IncomeCard from "../../components/sidebar/card/income-card";
 import HistoryTable from "../../components/table/history-table";
 import { database , realtimeDB } from "../../firebase/fb-config";
-import { collection, getDocs } from "firebase/firestore";
-import { get, ref } from "firebase/database";
+import { collection, getDocs , query , where } from "firebase/firestore";
+
+// import { get, ref } from "firebase/database";
 // import {app} from "../../firebase/fb-config";
 // import { ref , onValue } from "firebase/database"
 
@@ -24,6 +25,8 @@ interface YourData {
     date: string;
     category: string;
     amount: number | string;
+    income: number;
+    expense: number;
 
 
     // Define other properties of your data here
@@ -34,27 +37,69 @@ const Home = () => {
     const { user } = useUserAuth();
     const[ expenseCard , setExpenseCard ]   = useState<boolean>(false);
     const[ incomeCard , setIncomeCard ]     = useState<boolean>(false);
-    const[ realDB , setRealDB ]             = useState<YourData[]>([]);
+    const[ income , setIncome ]             = useState<any[]>([])
+    const[ expense , setExpense ]             = useState<any[]>([])
+    const[ totalIncome , setTotalIncome ]   = useState<number>();
+    const[ totalExpense , setTotalExpense ] = useState<number>();
+    const[ balance , setBalance ]           = useState<number>();
+
+
+    // const[ realDB , setRealDB ]             = useState<YourData[]>([]);
     const value = collection(database,"History");
 
     // const val = collection(realtimeDB,"Expense");
 
     const[ data , setData ] = useState<YourData[]> ([])
 
+    // Query
+    const incomeQuery = query(
+        collection(database,"Income"),
+        where("income",">",0)
+    )
+    const expenseQuery = query(
+        collection(database,"Expense"),
+        where("expense",">",0)
+    )
     // FireStore
     useEffect(()=>{
         const getData = async()=>{
             const dbData = await getDocs(value);
             setData(dbData.docs.map(doc=>({...doc.data(),id:doc.id})) as YourData[])
+            // Income Query
+            try {
+            const incomeQuerySnapshot = await getDocs(incomeQuery);
+            const incomeData: number[] = incomeQuerySnapshot.docs.map((doc) => doc.data().income) as number[];
+            setIncome(incomeData);
+
+            const totalIncomeValue = incomeData?.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+            setTotalIncome(totalIncomeValue);
+
+            const expenseQuerySnapshot = await getDocs(expenseQuery);
+                const expenseData: number[] = expenseQuerySnapshot.docs.map((doc) => doc.data().expense) as number[];
+                setExpense(expenseData);
+    
+                const totalExpenseValue = expenseData?.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+                setTotalExpense(totalExpenseValue);
+
+                const bal = totalIncomeValue - totalExpenseValue;
+                setBalance(bal);
+            } catch (error) {
+                console.error("Error fetching data: ", error);
+            }
+
+                
         }
         getData();
-        console.log(data);
+
+        // console.log(data);
     },[])
 
+    
     useEffect(()=>{
         setInterval(() => {
-                console.log(data);
-                
+console.log(balance);
+
+
         }, 8000 );
     }, [])
     // RealTime
@@ -111,9 +156,10 @@ const Home = () => {
         };
     });
 
-    console.log(transformedData);
-    
+    // console.log(transformedData);
 
+    
+    
 
     return(
         <div id="home-header">
@@ -134,8 +180,12 @@ const Home = () => {
                                         <div>year : </div>
                                     </div>
                                     <div className=" flex flex-col gap-3">
-                                        <p className=" text-white text-lg font-semibold">Total Income : </p>
-                                        <p className=" text-white text-lg font-semibold">Total Expense : </p>
+                                        <p className=" text-white text-lg font-semibold">Total Income : &#8377;{totalIncome}</p>
+                                        <p className=" text-white text-lg font-semibold">Total Expense : &#8377;{totalExpense} </p>
+                                    </div>
+
+                                    <div>
+                                        <p className="text-white mt-10">Balance : &#8377;{balance} </p>
                                     </div>
                                     
                                 </div>

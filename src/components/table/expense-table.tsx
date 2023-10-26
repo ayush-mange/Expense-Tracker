@@ -6,6 +6,7 @@ interface Expense {
     text: string;
     category: string;
     amount: number | string;
+    expense: number | string;
   }
 
 interface HistoryTableProps {
@@ -36,7 +37,7 @@ const ExpenseTable:React.FC<HistoryTableProps> = ({expensesData}) => {
                             <td>{expense?.date}</td>
                             <td>{expense?.text}</td>
                             <td>{expense?.category}</td>
-                            <td>&#8377;{expense?.amount}</td>
+                            <td>&#8377;{expense?.expense}</td>
                         </tr>
                     ))}
                 </tbody>

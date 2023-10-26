@@ -97,7 +97,7 @@ const ExpenseCard:React.FC<ExpenseCardProps> = ({setExpenseCard}) => {
         }
 
         // Firestore Database
-        await addDoc(value,{text:text , category: category , amount: amount});
+        await addDoc(value,{text:text , category: category , expense: amount});
         await addDoc(val,{text:text , category: category , amount: amount});
 
 

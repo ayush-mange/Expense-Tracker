@@ -6,6 +6,7 @@ interface Expense {
     text: string;
     category: string;
     amount: number | string;
+    
   }
 
 interface HistoryTableProps {

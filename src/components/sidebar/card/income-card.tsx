@@ -43,7 +43,7 @@ const IncomeCard: React.FC<IncomeCardProps> = ({setIncomeCard}) => {
         const { text , category , amount } = formData;
 
         // Firestore Database
-        await addDoc(value,{text:text , category: category , amount: amount});
+        await addDoc(value,{text:text , category: category , income: amount});
         await addDoc(val,{text:text , category: category , amount: amount});
 
     };
