@@ -176,8 +176,8 @@ console.log(balance);
                                 </div>
                                 <div className="ml-[2%]">
                                     <div className="text-[#b1b1b1] text-sm flex flex-row gap-24 mb-[15%]">
-                                        <div>month : </div>
-                                        <div>year : </div>
+                                        <div>month : october</div>
+                                        <div>year : 2023 </div>
                                     </div>
                                     <div className=" flex flex-col gap-3">
                                         <p className=" text-white text-lg font-semibold">Total Income : &#8377;{totalIncome}</p>
@@ -200,7 +200,7 @@ console.log(balance);
                                 <div className="w-[30px] h-[30px] rounded-[50%] bg-[#EA4C4C]"/>
                                 <div className="">Add Expense</div>
                             </div>
-                            {expenseCard && <ExpenseCard setExpenseCard={setExpenseCard}/>}
+                            {expenseCard && <ExpenseCard setExpenseCard={setExpenseCard} balance={balance}/>}
                             <div className="flex flex-row items-center gap-2 cursor-pointer " onClick={handleIncome}>
                                 <div className="w-[30px] h-[30px] rounded-[50%] bg-[#25B7AE]"/>
                                 <div className="">Add Income</div>

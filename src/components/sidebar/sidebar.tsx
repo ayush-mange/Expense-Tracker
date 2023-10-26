@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 // import { useState } from "react";
 // import Login from "./auth/login";
 // import SignUp from "./auth/signup";
-import { Link } from "react-router-dom";
+import { Link , useNavigate } from "react-router-dom";
 import { useUserAuth } from "../../context/UserAuthContext";
 
 const Sidebar = () => {
+const cssClassname = "bg-[#303030] w-[20%] overflow-y-auto h-[100%] fixed text-custom-dark flex flex-col "
+const navigate = useNavigate();
 const { logout } = useUserAuth();
+
+const currentPath = window.location.pathname;
+// console.log(currentPath);
+
 
     const handleLogout =async () => {
     try {
@@ -14,10 +20,12 @@ const { logout } = useUserAuth();
     } catch (error) {
         
     }
+
+    
 }
     return(
         <>
-        <div className="bg-[#303030] w-[20%] overflow-y-auto h-[100%] fixed text-custom-dark flex flex-col">
+        <div className={`bg-[#303030] w-[20%] overflow-y-auto h-[100%] fixed text-custom-dark flex flex-col ${currentPath=="/login" && 'hidden'} ${currentPath=="/register" && 'hidden'}`} >
             <div className=" text-white text-2xl font-semibold justify-center items-center gap-6  ml-[10%] mt-[10%]">
                 Save Sphere
             </div>

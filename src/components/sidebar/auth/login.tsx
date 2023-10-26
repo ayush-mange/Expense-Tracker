@@ -10,7 +10,7 @@ const Login = () => {
     const [ password , setPassword ]    = useState("");
     const [ error , setError ]          = useState("")
     const { signIn }                    = useUserAuth();
-    // const navigate                      = useNavigate();
+    const navigate                      = useNavigate();
     const { user } = useUserAuth();
 
     const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
@@ -18,7 +18,7 @@ const Login = () => {
         setError("")
         try {
             await signIn(email , password );
-            // navigate("/selectuser")
+            navigate("/")
             console.log("successful login");
             console.log(user);
             

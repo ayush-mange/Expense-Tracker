@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import Card from 'react-bootstrap/Card';
 import Form         from 'react-bootstrap/Form';
 import { Alert, Button }   from "react-bootstrap";
-// import { Link , useNavigate } from "react-router-dom";
+import { Link , useNavigate } from "react-router-dom";
 import { useUserAuth } from "../../../context/UserAuthContext";
 import { log } from "console";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 
 const SignUp = () => {
@@ -13,14 +13,14 @@ const SignUp = () => {
     const [ password , setPassword ]    = useState("");
     const [ error , setError ]          = useState("")
     const { signUp }                    = useUserAuth();
-    // const navigate                      = useNavigate();
+    const navigate                      = useNavigate();
 
     const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError("")
         try {
             await signUp(email , password );
-            // navigate("/")
+            navigate("/")
             console.log("SignUp Successful");
             
         } catch (err : any) {

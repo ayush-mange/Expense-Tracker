@@ -2,10 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useUserAuth } from "../../../context/UserAuthContext";
 import { database } from "../../../firebase/fb-config";
 import { addDoc, collection } from "firebase/firestore";
+import { ConditionalExpression } from "typescript";
 
 
 interface ExpenseCardProps{
     setExpenseCard : React.Dispatch<React.SetStateAction<boolean>>;
+    balance?: number | undefined;
+
 }
 
 interface FormData {
@@ -16,7 +19,7 @@ interface FormData {
 
 const Categories: string[] = ["Food" , "Clothing" , "Travel"];
 
-const ExpenseCard:React.FC<ExpenseCardProps> = ({setExpenseCard}) => {
+const ExpenseCard:React.FC<ExpenseCardProps> = ({setExpenseCard , balance }) => {
     const {user} = useUserAuth(); 
     const[uid , setUID] = useState("")
     const value = collection(database,"Expense");
@@ -25,6 +28,8 @@ const ExpenseCard:React.FC<ExpenseCardProps> = ({setExpenseCard}) => {
 
     useEffect(()=>{
         setUID(user.uid)
+        console.log(balance);
+        
     },[])
     
 
@@ -90,15 +95,21 @@ const ExpenseCard:React.FC<ExpenseCardProps> = ({setExpenseCard}) => {
         );
 
 
-        if(res){
-            alert("data stored")
-        }else{
-            alert("pls fill the data")
-        }
+        // if(res){
+        //     alert("data stored")
+        // }else{
+        //     alert("pls fill the data")
+        // }
 
-        // Firestore Database
-        await addDoc(value,{text:text , category: category , expense: amount});
-        await addDoc(val,{text:text , category: category , amount: amount});
+                // Firestore Database
+        if (balance !== undefined && amount>balance) {
+            alert("Unsufficient balance");
+        }else{
+            await addDoc(value,{text:text , category: category , expense: amount});
+            await addDoc(val,{text:text , category: category , amount: amount});
+            alert("data stored");
+        }
+       
 
 
         setExpenseCard(false);
