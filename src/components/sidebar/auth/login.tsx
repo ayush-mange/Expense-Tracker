@@ -40,6 +40,7 @@ return (
                     <Form.Group className="tw-px-4" controlId="exampleForm.ControlInput1">  
                         <Form.Label className="text-sm text-white">Email address :  </Form.Label>
                         <Form.Control 
+                            className="text-white text-sm bg-[#555555] p-2 ml-2 rounded-md w-[62%] h-[60%] whitespace-normal"
                             type="email" 
                             placeholder="name@example.com" 
                             onChange={(e) => setEmail(e.target.value)}/>
@@ -47,11 +48,12 @@ return (
                      <Form.Group className="mb-3 px-4 mt-3" controlId="exampleForm.ControlInput1">
                         <Form.Label className="text-sm text-white">Password : </Form.Label>
                         <Form.Control 
+                            className="text-white text-sm bg-[#555555] p-2 ml-2 rounded-md w-[70%] h-[60%] whitespace-normal"
                             type="password" 
                             placeholder="password" 
                             onChange={(e) => setPassword(e.target.value)}/>
                      </Form.Group>
-                     <div className="grid gap-6 text-white"><Button variant="primary" type="submit">Login</Button></div>
+                     <div className="grid gap-6 text-white bg-gray-900 mx-[20%] rounded-md"><Button variant="primary" type="submit">Login</Button></div>
                      <span className="text-white flex mt-1 justify-center align-items-center cursor-pointer"><Link to="/register">Don't have an account?</Link>
                         {/* <Link style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }} className="tw-align-items-center tw-ml-1" to="/register">SignUp</Link> */}
                     </span>

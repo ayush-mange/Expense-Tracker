@@ -44,9 +44,9 @@ const currentPath = window.location.pathname;
                 {/* <li className={` text-white h-12 flex flex-row items-center gap-6 p-5 rounded-xl font-medium text-base  hover:text-lg` }>
                     Analytics
                 </li>   */}
-                <li className={` text-white h-12 flex flex-row items-center gap-6 p-5 rounded-xl font-medium text-base   hover:text-lg` }>
+                {/* <li className={` text-white h-12 flex flex-row items-center gap-6 p-5 rounded-xl font-medium text-base   hover:text-lg` }>
                     Contact Us
-                </li>  
+                </li>   */}
                 </>
                 </div>
 

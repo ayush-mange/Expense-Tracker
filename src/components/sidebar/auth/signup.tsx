@@ -42,20 +42,23 @@ const SignUp = () => {
                     <Form.Group className="px-4" controlId="exampleForm.ControlInput1">
                         <Form.Label className="text-sm text-white">Email address</Form.Label>
                         <Form.Control 
+                            className="text-white text-sm bg-[#555555] p-2 ml-2 rounded-md w-[62%] h-[60%] whitespace-normal"
                             type="email" 
                             placeholder="name@example.com" 
                             onChange={(e) => setEmail(e.target.value)}/>
                      </Form.Group>
-                     <Form.Group className="mb-3 px-4 tw-mt-3" controlId="exampleForm.ControlInput1">
+                     <Form.Group className="mb-3 px-4 mt-3" controlId="exampleForm.ControlInput1">
                         <Form.Label className="text-sm text-white">Password</Form.Label>
-                        <Form.Control 
+                        <Form.Control                             
+                            className="text-white text-sm bg-[#555555] p-2 ml-2 rounded-md w-[62%] h-[60%] whitespace-normal"
                             type="password" 
                             placeholder="password" 
                             onChange={(e)=>setPassword(e.target.value)}/>
                      </Form.Group>
                      <Form.Group className="mb-3 px-4 tw-mt-3" controlId="exampleForm.ControlInput1">
                         <Form.Label className="text-sm text-white">Confirm Password</Form.Label>
-                        <Form.Control type="password" placeholder="password" />
+                        <Form.Control type="password" placeholder="password" className="text-white text-sm bg-[#555555] p-2 ml-2 rounded-md w-[62%] h-[60%] whitespace-normal"
+/>
                      </Form.Group>
                      <div className="grid gap-6 text-white"><Button variant="primary" type="submit">Sign Up</Button></div>
                      <span className="flex mt-1 justify-center align-items-center text-white cursor-pointer"><Link to="/login">Already have an account?</Link>

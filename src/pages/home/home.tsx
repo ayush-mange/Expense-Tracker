@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , useRef } from "react";
 import { useUserAuth } from "../../context/UserAuthContext";
 import ExpenseCard from "../../components/sidebar/card/expense-card";
 import IncomeCard from "../../components/sidebar/card/income-card";
 import HistoryTable from "../../components/table/history-table";
 import { database , realtimeDB } from "../../firebase/fb-config";
 import { collection, getDocs , query , where } from "firebase/firestore";
+import Chart from "chart.js/auto";
+
 
 // import { get, ref } from "firebase/database";
 // import {app} from "../../firebase/fb-config";
@@ -42,14 +44,10 @@ const Home = () => {
     const[ totalIncome , setTotalIncome ]   = useState<number>();
     const[ totalExpense , setTotalExpense ] = useState<number>();
     const[ balance , setBalance ]           = useState<number>();
-
-
-    // const[ realDB , setRealDB ]             = useState<YourData[]>([]);
     const value = collection(database,"History");
-
-    // const val = collection(realtimeDB,"Expense");
-
     const[ data , setData ] = useState<YourData[]> ([])
+    const chartRef = useRef<HTMLCanvasElement | null>(null);
+    const chartInstanceRef = useRef<Chart | null>(null);
 
     // Query
     const incomeQuery = query(
@@ -102,6 +100,75 @@ console.log(balance);
 
         }, 8000 );
     }, [])
+
+    
+    useEffect(() => {
+        if (chartInstanceRef.current) {
+          // Destroy the existing chart instance
+          chartInstanceRef.current.destroy();
+        }
+    
+        if (chartRef.current) {
+          const ctx = chartRef.current.getContext("2d");
+    
+          if (ctx) {
+            const validTotalIncome = totalIncome || 0;
+            const validTotalExpense = totalExpense || 0;
+
+            // Create a new chart instance
+            chartInstanceRef.current = new Chart(ctx, {
+              type: "bar",
+              data: {
+                labels: ["Income", "Expense"],
+                datasets: [
+                  {
+                    label: "Amount",
+                    data: [validTotalIncome, validTotalExpense],
+                    backgroundColor: ["green", "red"],
+                    barPercentage: 0.5, // Adjust the width of the bars (0.5 means 50% of available space)
+                categoryPercentage: 0.5,
+                  },
+                ],
+              },
+              options: {
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                  },
+                },
+                plugins: {
+                    legend: {
+                      display: true,
+                      labels: {
+                        font: {
+                          size: 10, // Adjust font size for the legend
+                        },
+                      },
+                    },
+                  },
+                  layout: {
+                    padding: {
+                      left: 10, // Adjust padding on the left side of the graph
+                      right: 10, // Adjust padding on the right side of the graph
+                      top: 10, // Adjust padding on the top side of the graph
+                      bottom: 10, // Adjust padding on the bottom side of the graph
+                    },
+                  },
+                  maintainAspectRatio: false,
+              },
+            });
+          }
+        }
+    
+        // Cleanup: destroy the chart instance when the component is unmounted
+        return () => {
+          if (chartInstanceRef.current) {
+            chartInstanceRef.current.destroy();
+          }
+        };
+      }, [totalIncome, totalExpense]);
+    
+    
     // RealTime
     // useEffect(()=>{
     //     const fetchData = async() =>{
@@ -169,13 +236,21 @@ console.log(balance);
             </div>
             <div id="container" className="mt-[3%] flex flex-col gap-4 justify-center">
                 <div id="top" className="w-[99%] ">
-                    <div className="bg-[rgb(48,48,48)] w-[100%] h-max p-3">
+                    <div className="flex flex-row">
+                    <div className="bg-[rgb(48,48,48)] w-[50%] h-max p-3">
                             <div className="flex flex-row">
-                                <div className="relative w-[40%] h-[200px] bg-[#d3cdcd] ">
+                                
+                                {/* <div className="relative w-[40%] h-[200px] bg-[#d3cdcd] ">
                                     <p className=" absolute left-1/2 top-1/2 -translate-x-10 -translate-y-1/2">Graph</p>
-                                </div>
-                                <div className="ml-[2%]">
-                                    <div className="text-[#b1b1b1] text-sm flex flex-row gap-24 mb-[15%]">
+                                </div> */}
+                                <canvas ref={chartRef} width="200" height="250" ></canvas>
+                                
+                            </div>
+                    </div>
+                    <div>
+                        <div className="bg-[rgb(48,48,48)] w-[192%] h-max pb-[31.5%]">
+                            <div className="pt-5">
+                                    <div className="text-[#b1b1b1] text-sm flex flex-row gap-24 mb-[5%]">
                                         <div>month : october</div>
                                         <div>year : 2023 </div>
                                     </div>
@@ -188,9 +263,11 @@ console.log(balance);
                                         <p className="text-white mt-10">Balance : &#8377;{balance} </p>
                                     </div>
                                     
-                                </div>
                             </div>
+                        </div>
                     </div>
+                    </div>
+                    
                 </div>
                 <div id="Categories" className="w-[99%]">
                     <div className="bg-[rgb(48,48,48)] w-[100%] h-max p-3">
