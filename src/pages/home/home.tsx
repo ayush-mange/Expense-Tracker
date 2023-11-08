@@ -29,6 +29,7 @@ interface YourData {
     amount: number | string;
     income: number;
     expense: number;
+    time:string;
 
 
     // Define other properties of your data here
@@ -219,7 +220,7 @@ console.log(balance);
             date: item.date,
             category: item.category,
             amount: item.amount,
-            time: "12:45", // You might need to set a default or extract the 'time' value from somewhere
+            time: item.time, // You might need to set a default or extract the 'time' value from somewhere
         };
     });
 
@@ -251,7 +252,7 @@ console.log(balance);
                         <div className="bg-[rgb(48,48,48)] w-[192%] h-max pb-[31.5%]">
                             <div className="pt-5">
                                     <div className="text-[#b1b1b1] text-sm flex flex-row gap-24 mb-[5%]">
-                                        <div>month : october</div>
+                                        <div>month : November</div>
                                         <div>year : 2023 </div>
                                     </div>
                                     <div className=" flex flex-col gap-3">

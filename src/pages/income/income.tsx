@@ -26,7 +26,7 @@ interface YourData {
     category: string;
     amount: number | string;
     income: number | string;
-
+    time:string;
 
     // Define other properties of your data here
   }
@@ -87,7 +87,7 @@ const Income = () => {
             date: item.date,
             category: item.category,
             amount: item.amount,
-            time: "12:45", 
+            time: item.time, 
             income: item.income
         };
     });

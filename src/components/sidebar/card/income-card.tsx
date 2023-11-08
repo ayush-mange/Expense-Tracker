@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { database } from "../../../firebase/fb-config";
 import { addDoc, collection } from "firebase/firestore";
+import { useUserAuth } from "../../../context/UserAuthContext";
+// import { Alert } from "react-bootstrap";
 
 interface IncomeCardProps {
     setIncomeCard : React.Dispatch<React.SetStateAction<boolean>>;
@@ -11,12 +13,16 @@ interface FormData {
     text: string;
     amount: number;
     category: string;
+    userID:string;
+    date : string;
+    time : string;
 }
 
 const Categories: string[] = ["Salary" , "Mutual Fund" , "Trading" , "Insurance"];
 
 const IncomeCard: React.FC<IncomeCardProps> = ({setIncomeCard}) => {
-
+    const[uid,setUID] = useState("");
+    const {user} = useUserAuth();
     const value = collection(database,"Income");
     const val = collection(database,"History")
 
@@ -24,8 +30,22 @@ const IncomeCard: React.FC<IncomeCardProps> = ({setIncomeCard}) => {
     const[ formData , setFormData ] = useState<FormData>({
         text: "",
         amount: 0,
-        category: Categories[0]
+        category: Categories[0],
+        userID : user?.uid,
+        date: "",
+        time : "",
     });
+
+    useEffect(()=>{
+        try {
+            setUID(user.uid)
+        } catch (error) {
+            console.log(error);
+        }
+    },[ ])
+
+    console.log(uid);
+    
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>{
         const {name , value } = e.target;
@@ -39,12 +59,48 @@ const IncomeCard: React.FC<IncomeCardProps> = ({setIncomeCard}) => {
         e.preventDefault();
         console.log(formData);
         setIncomeCard(false);
+
+        const now = new Date();
+        const options: Intl.DateTimeFormatOptions = {
+           timeZone: "Asia/Kolkata",
+           hour12: false, 
+           hour: "2-digit",
+           minute: "2-digit",
+       };
+
+       const dateOptions: Intl.DateTimeFormatOptions = {
+           timeZone: "Asia/Kolkata",
+           day: "2-digit",
+           month: "2-digit",
+           year: "numeric"
+         };
+
+     const currentTime = new Intl.DateTimeFormat("en-IN", options).format(now);
+     const todaydate = new Intl.DateTimeFormat("en-IN", dateOptions).format(now);
+
+     console.log(todaydate);
+     
         
-        const { text , category , amount } = formData;
+        const { text , category , amount  , userID ,date , time } = formData;
 
         // Firestore Database
-        await addDoc(value,{text:text , category: category , income: amount});
-        await addDoc(val,{text:text , category: category , amount: amount});
+        if(uid===""||uid===undefined){
+            alert("please login")
+        }else{
+            if (amount===0) {
+                alert("amount should be greater than 0")
+            }else{
+                if ((date==="" || date === undefined) && todaydate!=="") {
+                    await addDoc(value,{text:text , category: category , income: amount , userID : userID , date:todaydate ,time : currentTime});
+                    await addDoc(val,{text:text , category: category , amount: amount , userID : userID , date: todaydate , time : currentTime});
+                }else{
+                    await addDoc(value,{text:text , category: category , income: amount , userID : userID , date:date ,time : currentTime});
+                await addDoc(val,{text:text , category: category , amount: amount , userID : userID , date: date , time : currentTime});
+                }
+                
+            }
+        }
+        
 
     };
 
@@ -79,6 +135,17 @@ const IncomeCard: React.FC<IncomeCardProps> = ({setIncomeCard}) => {
                             onChange={handleInputChange} />
                         </label>
                     </div>
+                    <div id="date ">
+                        <label>
+                             Date :
+                        <input className="text-white text-sm bg-[#555555] p-2 ml-2 rounded-md w-[75%]"
+                            type="date" 
+                            name="date" 
+                            value={formData.date} 
+                            onChange={handleInputChange} />
+                        </label>
+                    </div>
+                    
                     <div>
                         <label>
                             Category : 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useUserAuth } from "../../../context/UserAuthContext";
 import { database } from "../../../firebase/fb-config";
 import { addDoc, collection } from "firebase/firestore";
-import { ConditionalExpression } from "typescript";
+// import { ConditionalExpression } from "typescript";
 
 
 interface ExpenseCardProps{
@@ -15,6 +15,7 @@ interface FormData {
     text: string;
     amount: number;
     category: string;
+    date:string;
 }
 
 const Categories: string[] = ["Food" , "Clothing" , "Travel"];
@@ -27,7 +28,13 @@ const ExpenseCard:React.FC<ExpenseCardProps> = ({setExpenseCard , balance }) => 
 
 
     useEffect(()=>{
-        setUID(user.uid)
+        try {
+            setUID(user.uid)
+        } catch (error) {
+            console.log(error);
+            
+        }
+        
         console.log(balance);
         
     },[])
@@ -36,7 +43,8 @@ const ExpenseCard:React.FC<ExpenseCardProps> = ({setExpenseCard , balance }) => 
     const[ formData , setFormData ] = useState<FormData>({
         text: "",
         amount: 0,
-        category: Categories[0]
+        category: Categories[0],
+        date:"",
     });
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>{
@@ -68,13 +76,13 @@ const ExpenseCard:React.FC<ExpenseCardProps> = ({setExpenseCard , balance }) => 
           };
 
       const time = new Intl.DateTimeFormat("en-IN", options).format(now);
-      const date = new Intl.DateTimeFormat("en-IN", dateOptions).format(now);
+      const todaydate = new Intl.DateTimeFormat("en-IN", dateOptions).format(now);
     //   console.log(formattedTime);
-    //   console.log(formattedDate);
+      console.log(todaydate);
       
       
         
-        const { text , category , amount } = formData;
+        const { text , category , amount , date } = formData;
         
         const res = await fetch(
             "https://savesphere-a38d8-default-rtdb.asia-southeast1.firebasedatabase.app/RecentHistory.json",
@@ -105,9 +113,25 @@ const ExpenseCard:React.FC<ExpenseCardProps> = ({setExpenseCard , balance }) => 
         if (balance !== undefined && amount>balance) {
             alert("Unsufficient balance");
         }else{
-            await addDoc(value,{text:text , category: category , expense: amount});
-            await addDoc(val,{text:text , category: category , amount: amount});
-            alert("data stored");
+            if (uid==="" || uid===undefined) {
+                alert("please login")
+            }else{
+                if (amount === 0) {
+                    alert("amount should not be 0")
+                }else{
+                    if (date===""||date===undefined) {
+                        await addDoc(value,{text:text , category: category , expense: amount , userID : uid , date:todaydate , time:time});
+                    await addDoc(val,{text:text , category: category , amount: amount , userId : uid , date:todaydate , time: time});
+                    alert("data stored");
+                    }else{
+                        await addDoc(value,{text:text , category: category , expense: amount , userID : uid , date:date , time: time});
+                        await addDoc(val,{text:text , category: category , amount: amount , userId : uid , date:date , time: time});
+                        alert("data stored");
+                    }
+                    
+                }
+            }
+           
         }
        
 
@@ -144,6 +168,16 @@ const ExpenseCard:React.FC<ExpenseCardProps> = ({setExpenseCard , balance }) => 
                             type="number" 
                             name="amount" 
                             value={formData.amount} 
+                            onChange={handleInputChange} />
+                        </label>
+                    </div>
+                    <div id="date ">
+                        <label>
+                             Date :
+                        <input className="text-white text-sm bg-[#555555] p-2 ml-2 rounded-md w-[75%]"
+                            type="date" 
+                            name="date" 
+                            value={formData.date} 
                             onChange={handleInputChange} />
                         </label>
                     </div>
