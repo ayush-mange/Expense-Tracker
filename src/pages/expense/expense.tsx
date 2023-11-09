@@ -36,33 +36,45 @@ const Expenses = () => {
     const value = collection(database,"Expense");
     const[ totalExpense , setTotalExpense ] = useState<number>();
     const[ expense , setExpense ]             = useState<any[]>([])
+    const[ userUID , setUserUID ]           = useState()
+
 
     console.log(user);
     
+    useEffect(()=>{
+        try {
+          setUserUID(user.uid)
+        } catch (error) {
+          
+        }
+      },[])
 
-    const expenseQuery = query(
-        collection(database,"Expense"),
-        where("expense",">",0)
-    )
+    
      // FireStore
-     useEffect(()=>{
+    if(userUID){
         const getData = async()=>{
-            const dbData = await getDocs(value);
+            const q = query(collection(database,"Expense"),where("userEmail","==",user.email))
+            const dbData = await getDocs(q);
             setData(dbData.docs.map(doc=>({...doc.data(),id:doc.id})) as YourData[])
             try {
-                const expenseQuerySnapshot = await getDocs(expenseQuery);
-                const expenseData: number[] = expenseQuerySnapshot.docs.map((doc) => doc.data().expense) as number[];
-                setExpense(expenseData);
+                if (userUID) {
+                    const expenseQuery = query(collection(database,"Expense"),where("userEmail","==",user.email))
+                    const expenseQuerySnapshot = await getDocs(expenseQuery);
+                    const expenseData: number[] = expenseQuerySnapshot.docs.map((doc) => doc.data().expense) as number[];
+                    setExpense(expenseData);
     
-                const totalExpenseValue = expenseData?.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-                setTotalExpense(totalExpenseValue);
+                    const totalExpenseValue = expenseData?.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+                    setTotalExpense(totalExpenseValue);
+                }
+                
             } catch (error) {
                 console.error("Error fetching data: ", error);
             }
         }
         getData();
         console.log(data);
-    },[])
+    }
+        
 
     useEffect(()=>{
         setInterval(() => {

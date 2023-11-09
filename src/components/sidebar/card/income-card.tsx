@@ -91,11 +91,11 @@ const IncomeCard: React.FC<IncomeCardProps> = ({setIncomeCard}) => {
                 alert("amount should be greater than 0")
             }else{
                 if ((date==="" || date === undefined) && todaydate!=="") {
-                    await addDoc(value,{text:text , category: category , income: amount , userID : userID , date:todaydate ,time : currentTime});
-                    await addDoc(val,{text:text , category: category , amount: amount , userID : userID , date: todaydate , time : currentTime});
+                    await addDoc(value,{text:text , category: category , income: amount , userID : userID ,userEmail:user.email, date:todaydate ,time : currentTime});
+                    await addDoc(val,{text:text , category: category , amount: amount , userID : userID ,userEmail:user.email, date: todaydate , time : currentTime});
                 }else{
-                    await addDoc(value,{text:text , category: category , income: amount , userID : userID , date:date ,time : currentTime});
-                await addDoc(val,{text:text , category: category , amount: amount , userID : userID , date: date , time : currentTime});
+                    await addDoc(value,{text:text , category: category , income: amount , userID : userID ,userEmail:user.email, date:date ,time : currentTime});
+                await addDoc(val,{text:text , category: category , amount: amount , userID : userID ,userEmail:user.email, date: date , time : currentTime});
                 }
                 
             }
@@ -163,7 +163,7 @@ const IncomeCard: React.FC<IncomeCardProps> = ({setIncomeCard}) => {
                                 </select>
                         </label>
                     </div>
-                    <button type="submit" className="mt-[25%] bg-[#EA4C4C] p-2 rounded-md">Submit</button>
+                    <button type="submit" className="mt-[10%] bg-[#EA4C4C] p-2 rounded-md">Submit</button>
                 </form>
                 </div>
             </div>

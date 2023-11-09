@@ -38,35 +38,52 @@ const Income = () => {
     const value = collection(database,"Income");
     const[ income , setIncome ]             = useState<any[]>([])
     const[ totalIncome , setTotalIncome ]   = useState<number>();
+    const[ userUID , setUserUID ]           = useState()
+
 
 
     console.log(user);
     
     // Query
-    const incomeQuery = query(
-        collection(database,"Income"),
-        where("income",">",0)
-    )
+    // const incomeQuery = query(
+    //     collection(database,"Income"),
+    //     where("income",">",0)
+    // )
+
+    useEffect(()=>{
+        try {
+          setUserUID(user.uid)
+        } catch (error) {
+          
+        }
+      },[])
 
      // FireStore
-     useEffect(()=>{
+     if(userUID){
         const getData = async()=>{
-            const dbData = await getDocs(value);
+            const q = query(collection(database,"Income"),where("userEmail","==",user.email))
+            const dbData = await getDocs(q);
             setData(dbData.docs.map(doc=>({...doc.data(),id:doc.id})) as YourData[])
             try {
-                const querySnapshot = await getDocs(incomeQuery);
-                const incomeData: number[] = querySnapshot.docs.map((doc) => doc.data().income) as number[];
-                setIncome(incomeData);
+                if (userUID) {
+                    const incomeQuery = query(
+                        collection(database,"Income"),
+                        where("userEmail","==",user.email)
+                    )
+                    const querySnapshot = await getDocs(incomeQuery);
+                    const incomeData: number[] = querySnapshot.docs.map((doc) => doc.data().income) as number[];
+                    setIncome(incomeData);
 
-                const total = incomeData.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-                setTotalIncome(total);
+                    const total = incomeData.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+                    setTotalIncome(total);
+                }
                 } catch (error) {
                     console.error("Error fetching data: ", error);
                 }
         }
         getData();
-        console.log(data);
-    },[])
+     }
+        
 
     useEffect(()=>{
         setInterval(() => {

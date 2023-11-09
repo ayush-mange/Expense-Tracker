@@ -110,7 +110,7 @@ const ExpenseCard:React.FC<ExpenseCardProps> = ({setExpenseCard , balance }) => 
         // }
 
                 // Firestore Database
-        if (balance !== undefined && amount>balance) {
+        if ((balance !== undefined && amount>balance)|| balance === undefined) {
             alert("Unsufficient balance");
         }else{
             if (uid==="" || uid===undefined) {
@@ -120,12 +120,12 @@ const ExpenseCard:React.FC<ExpenseCardProps> = ({setExpenseCard , balance }) => 
                     alert("amount should not be 0")
                 }else{
                     if (date===""||date===undefined) {
-                        await addDoc(value,{text:text , category: category , expense: amount , userID : uid , date:todaydate , time:time});
-                    await addDoc(val,{text:text , category: category , amount: amount , userId : uid , date:todaydate , time: time});
+                        await addDoc(value,{text:text , category: category , expense: amount , userID : uid ,userEmail:user.email, date:todaydate , time:time});
+                    await addDoc(val,{text:text , category: category , amount: amount , userID : uid,userEmail:user.email , date:todaydate , time: time});
                     alert("data stored");
                     }else{
-                        await addDoc(value,{text:text , category: category , expense: amount , userID : uid , date:date , time: time});
-                        await addDoc(val,{text:text , category: category , amount: amount , userId : uid , date:date , time: time});
+                        await addDoc(value,{text:text , category: category , expense: amount , userID : uid,userEmail:user.email , date:date , time: time});
+                        await addDoc(val,{text:text , category: category , amount: amount , userID : uid,userEmail:user.email , date:date , time: time});
                         alert("data stored");
                     }
                     
@@ -198,7 +198,7 @@ const ExpenseCard:React.FC<ExpenseCardProps> = ({setExpenseCard , balance }) => 
                                 </select>
                         </label>
                     </div>
-                    <button type="submit" className="mt-[25%] bg-[#EA4C4C] p-2 rounded-md">Submit</button>
+                    <button type="submit" className="mt-[10%] bg-[#EA4C4C] p-2 rounded-md">Submit</button>
                 </form>
                 </div>
             </div>

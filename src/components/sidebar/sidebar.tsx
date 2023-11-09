@@ -33,7 +33,7 @@ const currentPath = window.location.pathname;
                 <div className="mt-[5%] cursor-pointer p-8">
                 <>
                 <li className={`text-white h-12 flex flex-row items-center gap-6 p-5 rounded-xl font-medium text-base hover:text-lg` }> 
-                    <Link to="/">Home</Link>
+                    <a href="/">Home</a>
                 </li>
                 <li className={` text-white h-12 flex flex-row items-center gap-6 p-5 rounded-xl font-medium text-base  hover:text-lg` }>
                    <Link to="/expense">Expense</Link> 
@@ -58,7 +58,7 @@ const currentPath = window.location.pathname;
                         <Link to="login">Login</Link>
                     </div>
                     <div className="font-medium text-xl cursor-pointer hover:text-[#ccc8c8]" onClick={handleLogout}>
-                        Logout
+                        <a href="./">Logout</a>
                     </div>
                     
                 </div>

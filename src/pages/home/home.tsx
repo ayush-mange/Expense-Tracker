@@ -6,6 +6,7 @@ import HistoryTable from "../../components/table/history-table";
 import { database , realtimeDB } from "../../firebase/fb-config";
 import { collection, getDocs , query , where } from "firebase/firestore";
 import Chart from "chart.js/auto";
+import { log } from "console";
 
 
 // import { get, ref } from "firebase/database";
@@ -45,58 +46,103 @@ const Home = () => {
     const[ totalIncome , setTotalIncome ]   = useState<number>();
     const[ totalExpense , setTotalExpense ] = useState<number>();
     const[ balance , setBalance ]           = useState<number>();
+    const[ userUID , setUserUID ]           = useState()
     const value = collection(database,"History");
     const[ data , setData ] = useState<YourData[]> ([])
     const chartRef = useRef<HTMLCanvasElement | null>(null);
     const chartInstanceRef = useRef<Chart | null>(null);
 
-    // Query
-    const incomeQuery = query(
-        collection(database,"Income"),
-        where("income",">",0)
-    )
-    const expenseQuery = query(
-        collection(database,"Expense"),
-        where("expense",">",0)
-    )
-    // FireStore
     useEffect(()=>{
-        const getData = async()=>{
-            const dbData = await getDocs(value);
-            setData(dbData.docs.map(doc=>({...doc.data(),id:doc.id})) as YourData[])
-            // Income Query
-            try {
-            const incomeQuerySnapshot = await getDocs(incomeQuery);
-            const incomeData: number[] = incomeQuerySnapshot.docs.map((doc) => doc.data().income) as number[];
-            setIncome(incomeData);
+      setInterval(()=>{
+          try {
+            setUserUID(user.uid)
+          } catch (error) {
+            
+          }
+      },1000);
+    },[]);
 
-            const totalIncomeValue = incomeData?.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-            setTotalIncome(totalIncomeValue);
-
-            const expenseQuerySnapshot = await getDocs(expenseQuery);
-                const expenseData: number[] = expenseQuerySnapshot.docs.map((doc) => doc.data().expense) as number[];
-                setExpense(expenseData);
+    console.log(userUID);
     
-                const totalExpenseValue = expenseData?.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-                setTotalExpense(totalExpenseValue);
 
-                const bal = totalIncomeValue - totalExpenseValue;
-                setBalance(bal);
-            } catch (error) {
-                console.error("Error fetching data: ", error);
-            }
+    // Query
+    
+    //   const incomeQuery = query(
+    //     collection(database,"Income"),
+    //     where("income",">",0)
+    // )
+    
+    
+    // FireStore
+    if(user?.email){
+      // console.log(userUID);
+      
+      const getData = async()=>{
+        const q = query(collection(database,"History"),where("userEmail","==",user.email));
+        const dbData = await getDocs(q);
+        setData(dbData.docs.map(doc=>({...doc.data(),id:doc.id})) as YourData[])
+        console.log(data); 
+        
+        // Income Query
+        try {
+          if (user.email) {
+            // console.log(userUID);
 
-                
+            const incomeQuery = query(
+              collection(database,"Income"),
+              where("userEmail","==",user.email)
+          )
+            
+            const incomeQuerySnapshot = await getDocs(incomeQuery);
+              const incomeData: number[] = incomeQuerySnapshot.docs.map((doc) => doc.data().income) as number[];
+              setIncome(incomeData);
+
+              const totalIncomeValue = incomeData?.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+              setTotalIncome(totalIncomeValue);
+
+              const expenseQuery = query(collection(database,"Expense"),where("userEmail","==",user.email));
+              const expenseQuerySnapshot = await getDocs(expenseQuery);
+              const expenseData: number[] = expenseQuerySnapshot.docs.map((doc) => doc.data().expense) as number[];
+              setExpense(expenseData);
+
+              const totalExpenseValue = expenseData?.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+              setTotalExpense(totalExpenseValue);
+
+              const bal = totalIncomeValue - totalExpenseValue;
+              setBalance(bal);
+            
+          }
+            
+        } catch (error) {
+            console.error("Error fetching data: ", error);
         }
-        getData();
+
+            
+    }
+    getData();
+    }else{console.log("no users");
+    }
+
+    useEffect(()=>{
+      if (totalIncome && totalExpense) {
+        const bal = totalIncome - totalExpense;
+        setBalance(bal);
+        console.log(bal);
+        
+      }else{
+        console.log("no balance");
+        
+      }
+    },[2000])
+        
+    
 
         // console.log(data);
-    },[])
 
     
     useEffect(()=>{
         setInterval(() => {
-console.log(balance);
+          console.log(balance);
 
 
         }, 8000 );
@@ -273,7 +319,7 @@ console.log(balance);
                 <div id="Categories" className="w-[99%]">
                     <div className="bg-[rgb(48,48,48)] w-[100%] h-max p-3">
                         <p className="text-white text-lg font-medium">Categories : </p>
-                        <div className="flex flex-row justify justify-between px-10 mt-5 text-white text-base font-normal">
+                        <div className="flex flex-row justify gap-[30%] px-10 mt-5 text-white text-base font-normal">
                             <div className="flex flex-row items-center gap-2 cursor-pointer " onClick={handleExpense}>
                                 <div className="w-[30px] h-[30px] rounded-[50%] bg-[#EA4C4C]"/>
                                 <div className="">Add Expense</div>
@@ -284,10 +330,10 @@ console.log(balance);
                                 <div className="">Add Income</div>
                             </div>
                             {incomeCard && <IncomeCard setIncomeCard={setIncomeCard}/>}
-                            <div className="flex flex-row items-center gap-2 cursor-pointer ">
+                            {/* <div className="flex flex-row items-center gap-2 cursor-pointer ">
                                 <div className="w-[30px] h-[30px] rounded-[50%] bg-[#5B5B5B]"/>
                                 <div className="">Create Category</div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>
