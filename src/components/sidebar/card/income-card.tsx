@@ -3,7 +3,8 @@ import { useState } from "react";
 import { database } from "../../../firebase/fb-config";
 import { addDoc, collection } from "firebase/firestore";
 import { useUserAuth } from "../../../context/UserAuthContext";
-// import { Alert } from "react-bootstrap";
+// import { toast.error } from "react-bootstrap";
+import toast from "react-hot-toast";
 
 interface IncomeCardProps {
     setIncomeCard : React.Dispatch<React.SetStateAction<boolean>>;
@@ -85,10 +86,10 @@ const IncomeCard: React.FC<IncomeCardProps> = ({setIncomeCard}) => {
 
         // Firestore Database
         if(uid===""||uid===undefined){
-            alert("please login")
+            toast.error("please login")
         }else{
             if (amount===0) {
-                alert("amount should be greater than 0")
+                toast.error("amount should be greater than 0")
             }else{
                 if ((date==="" || date === undefined) && todaydate!=="") {
                     await addDoc(value,{text:text , category: category , income: amount , userID : userID ,userEmail:user.email, date:todaydate ,time : currentTime});

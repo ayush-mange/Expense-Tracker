@@ -3,7 +3,7 @@ import { useUserAuth } from "../../../context/UserAuthContext";
 import { database } from "../../../firebase/fb-config";
 import { addDoc, collection } from "firebase/firestore";
 // import { ConditionalExpression } from "typescript";
-
+import toast from "react-hot-toast";
 
 interface ExpenseCardProps{
     setExpenseCard : React.Dispatch<React.SetStateAction<boolean>>;
@@ -104,29 +104,29 @@ const ExpenseCard:React.FC<ExpenseCardProps> = ({setExpenseCard , balance }) => 
 
 
         // if(res){
-        //     alert("data stored")
+        //     toast.error("data stored")
         // }else{
-        //     alert("pls fill the data")
+        //     toast.error("pls fill the data")
         // }
 
                 // Firestore Database
         if ((balance !== undefined && amount>balance)|| balance === undefined) {
-            alert("Unsufficient balance");
+            toast.error("Unsufficient balance");
         }else{
             if (uid==="" || uid===undefined) {
-                alert("please login")
+                toast.error("please login")
             }else{
                 if (amount === 0) {
-                    alert("amount should not be 0")
+                    toast.error("amount should not be 0")
                 }else{
                     if (date===""||date===undefined) {
                         await addDoc(value,{text:text , category: category , expense: amount , userID : uid ,userEmail:user.email, date:todaydate , time:time});
                     await addDoc(val,{text:text , category: category , amount: amount , userID : uid,userEmail:user.email , date:todaydate , time: time});
-                    alert("data stored");
+                    toast.success("data stored");
                     }else{
                         await addDoc(value,{text:text , category: category , expense: amount , userID : uid,userEmail:user.email , date:date , time: time});
                         await addDoc(val,{text:text , category: category , amount: amount , userID : uid,userEmail:user.email , date:date , time: time});
-                        alert("data stored");
+                        toast.success("data stored");
                     }
                     
                 }

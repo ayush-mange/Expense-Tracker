@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 
 
 const root = ReactDOM.createRoot(
@@ -13,6 +14,12 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <App />
+      <Toaster position='top-right' toastOptions={{
+        style:{
+          background : "#363636",
+          color:'#fff'
+        }
+      }}/>
     </BrowserRouter>
   </React.StrictMode>
 );
