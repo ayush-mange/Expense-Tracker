@@ -1,5 +1,5 @@
 import React , { useEffect, useState } from "react";
-import ExpenseTable from "../../components/table/expense-table";
+import ExpenseTable from "../../context/table/expense-table";
 import { collection, getDocs , query , where} from "firebase/firestore";
 import { useUserAuth } from "../../context/UserAuthContext";
 import { database } from "../../firebase/fb-config";

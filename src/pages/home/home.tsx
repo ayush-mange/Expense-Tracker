@@ -2,7 +2,7 @@ import React, { useEffect, useState , useRef } from "react";
 import { useUserAuth } from "../../context/UserAuthContext";
 import ExpenseCard from "../../components/sidebar/card/expense-card";
 import IncomeCard from "../../components/sidebar/card/income-card";
-import HistoryTable from "../../components/table/history-table";
+import HistoryTable from "../../context/table/history-table";
 import { database , realtimeDB } from "../../firebase/fb-config";
 import { collection, getDocs , query , where } from "firebase/firestore";
 import Chart from "chart.js/auto";
@@ -275,83 +275,54 @@ const Home = () => {
     
     
 
-    return(
-        <div id="home-header">
-            <div className="flex justify-between items-center ">
-                <div className="text-2xl font-semibold text-white ">Dashboard</div>
-                <div className="text-white text-sm font-normal">{user?.email}</div>
-            </div>
-            <div id="container" className="mt-[3%] flex flex-col gap-4 justify-center">
-                <div id="top" className="w-[99%] ">
-                    <div className="flex flex-row">
-                    <div className="bg-[rgb(48,48,48)] w-[50%] h-max p-3">
-                            <div className="flex flex-row">
-                                
-                                {/* <div className="relative w-[40%] h-[200px] bg-[#d3cdcd] ">
-                                    <p className=" absolute left-1/2 top-1/2 -translate-x-10 -translate-y-1/2">Graph</p>
-                                </div> */}
-                                <canvas ref={chartRef} width="200" height="250" ></canvas>
-                                
-                            </div>
-                    </div>
-                    <div>
-                        <div className="bg-[rgb(48,48,48)] w-[192%] h-max pb-[31.5%]">
-                            <div className="pt-5">
-                                    <div className="text-[#b1b1b1] text-sm flex flex-row gap-24 mb-[5%]">
-                                        <div>month : April</div>
-                                        <div>year : 2024 </div>
-                                    </div>
-                                    <div className=" flex flex-col gap-3">
-                                        <p className=" text-white text-lg font-semibold">Total Income : &#8377;{totalIncome}</p>
-                                        <p className=" text-white text-lg font-semibold">Total Expense : &#8377;{totalExpense} </p>
-                                    </div>
-
-                                    <div>
-                                        <p className="text-white mt-10">Balance : &#8377;{balance} </p>
-                                    </div>
-                                    
-                            </div>
-                        </div>
-                    </div>
-                    </div>
-                    
-                </div>
-                <div id="Categories" className="w-[99%]">
-                    <div className="bg-[rgb(48,48,48)] w-[100%] h-max p-3">
-                        <p className="text-white text-lg font-medium">Categories : </p>
-                        <div className="flex flex-row justify gap-[30%] px-10 mt-5 text-white text-base font-normal">
-                            <div className="flex flex-row items-center gap-2 cursor-pointer " onClick={handleExpense}>
-                                <div className="w-[30px] h-[30px] rounded-[50%] bg-[#EA4C4C]"/>
-                                <div className="">Add Expense</div>
-                            </div>
-                            {expenseCard && <ExpenseCard setExpenseCard={setExpenseCard} balance={balance}/>}
-                            <div className="flex flex-row items-center gap-2 cursor-pointer " onClick={handleIncome}>
-                                <div className="w-[30px] h-[30px] rounded-[50%] bg-[#25B7AE]"/>
-                                <div className="">Add Income</div>
-                            </div>
-                            {incomeCard && <IncomeCard setIncomeCard={setIncomeCard}/>}
-                            {/* <div className="flex flex-row items-center gap-2 cursor-pointer ">
-                                <div className="w-[30px] h-[30px] rounded-[50%] bg-[#5B5B5B]"/>
-                                <div className="">Create Category</div>
-                            </div> */}
-                        </div>
-                    </div>
-                </div>
-
-                <div id="history" className="w-[99%] h-[200px] ">
-                    <div className="bg-[rgb(48,48,48)] w-[100%] h-max p-3">
-                    <p className="text-white text-lg font-medium">History : </p>
-                    <div>
-                        <HistoryTable expensesData={transformedData}/>
-                    </div>
-                    </div>
-
-                </div>
-            </div>
-            
+    return (
+      <div id="home-header" className="flex flex-col">
+        <div className="bg-[rgb(48,48,48)] h-max p-3 mb-4">
+          <canvas ref={chartRef} width="200" height="250"></canvas>
         </div>
-
-    )
+        <div className="bg-[rgb(48,48,48)] p-3 mb-4">
+          <div className="pt-5">
+            <div className="text-[#b1b1b1] text-sm flex flex-row gap-24 mb-[5%]">
+              <div>month: April</div>
+              <div>year: 2024 </div>
+            </div>
+            <div className="flex flex-col gap-3">
+              <p className="text-white text-lg font-semibold">Total Income : &#8377;{totalIncome}</p>
+              <p className="text-white text-lg font-semibold">Total Expense : &#8377;{totalExpense}</p>
+            </div>
+            <div>
+              <p className="text-white mt-10">Balance : &#8377;{balance}</p>
+            </div>
+          </div>
+        </div>
+        <div className="bg-[rgb(48,48,48)] h-max p-3 mb-4">
+          <p className="text-white text-lg font-medium">Categories : </p>
+          <div className="flex flex-col mt-5 text-white text-base font-normal">
+            <div className="flex flex-row items-center gap-2 cursor-pointer mb-3" onClick={handleExpense}>
+              <div className="w-[30px] h-[30px] rounded-[50%] bg-[#EA4C4C]"></div>
+              <div>Add Expense</div>
+            </div>
+            {expenseCard && <ExpenseCard setExpenseCard={setExpenseCard} balance={balance}/>}
+            <div className="flex flex-row items-center gap-2 cursor-pointer mb-3" onClick={handleIncome}>
+              <div className="w-[30px] h-[30px] rounded-[50%] bg-[#25B7AE]"></div>
+              <div>Add Income</div>
+            </div>
+            {incomeCard && <IncomeCard setIncomeCard={setIncomeCard}/>}
+            {/* <div className="flex flex-row items-center gap-2 cursor-pointer mb-3">
+              <div className="w-[30px] h-[30px] rounded-[50%] bg-[#5B5B5B]"></div>
+              <div>Create Category</div>
+            </div> */}
+          </div>
+        </div>
+        <div className="bg-[rgb(48,48,48)] h-max p-3">
+          <p className="text-white text-lg font-medium">History : </p>
+          <div>
+            <HistoryTable expensesData={transformedData}/>
+          </div>
+        </div>
+      </div>
+    );
+    
 }
 
 export default Home;
