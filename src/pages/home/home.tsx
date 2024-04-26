@@ -277,6 +277,31 @@ const Home = () => {
 
     return (
       <div id="home-header" className="flex flex-col">
+         <div className=" h-max p-3 mb-4">
+          {/* <p className="text-white text-lg font-medium">Categories : </p> */}
+          <div className="flex flex-row mt-5 text-white text-base font-normal">
+            <div className="flex flex-row items-center gap-2 cursor-pointer mb-3" onClick={handleExpense}>
+              {/* <div className="w-[30px] h-[30px] rounded-[50%] bg-[#EA4C4C]"></div> */}
+              <div><img className="w-40 ml-[460%] " src={require("../../Assets/add-expense-button.png")} alt="" /></div>
+            </div>
+            {expenseCard && <ExpenseCard setExpenseCard={setExpenseCard} balance={balance}/>}
+            <div className="flex flex-row items-center gap-2 cursor-pointer mb-3 " onClick={handleIncome}>
+              {/* <div className="w-[30px] h-[30px] rounded-[50%] bg-[#25B7AE]"></div> */}
+              <div><img className="w-40 ml-[475%] " src={require("../../Assets/add-income-button.png")} alt="" /></div>
+            </div>
+            {incomeCard && <IncomeCard setIncomeCard={setIncomeCard}/>}
+            {/* <div className="flex flex-row items-center gap-2 cursor-pointer mb-3">
+              <div className="w-[30px] h-[30px] rounded-[50%] bg-[#5B5B5B]"></div>
+              <div>Create Category</div>
+            </div> */}
+          </div>
+        </div>
+        <div className="h-max p-3">
+          <p className="text-white text-lg font-medium">History : </p>
+          <div>
+            <HistoryTable expensesData={transformedData}/>
+          </div>
+        </div>
         <div className=" h-max p-3 mb-4">
           <canvas ref={chartRef} width="200" height="250"></canvas>
         </div>
@@ -295,31 +320,8 @@ const Home = () => {
             </div>
           </div>
         </div>
-        <div className=" h-max p-3 mb-4">
-          {/* <p className="text-white text-lg font-medium">Categories : </p> */}
-          <div className="flex flex-col mt-5 text-white text-base font-normal">
-            <div className="flex flex-row items-center gap-2 cursor-pointer mb-3" onClick={handleExpense}>
-              {/* <div className="w-[30px] h-[30px] rounded-[50%] bg-[#EA4C4C]"></div> */}
-              <div><img className="w-40 ml-[550%] " src={require("../../Assets/add-expense-button.png")} alt="" /></div>
-            </div>
-            {expenseCard && <ExpenseCard setExpenseCard={setExpenseCard} balance={balance}/>}
-            <div className="flex flex-row items-center gap-2 cursor-pointer mb-3 " onClick={handleIncome}>
-              {/* <div className="w-[30px] h-[30px] rounded-[50%] bg-[#25B7AE]"></div> */}
-              <div><img className="w-40 ml-[550%] " src={require("../../Assets/add-income-button.png")} alt="" /></div>
-            </div>
-            {incomeCard && <IncomeCard setIncomeCard={setIncomeCard}/>}
-            {/* <div className="flex flex-row items-center gap-2 cursor-pointer mb-3">
-              <div className="w-[30px] h-[30px] rounded-[50%] bg-[#5B5B5B]"></div>
-              <div>Create Category</div>
-            </div> */}
-          </div>
-        </div>
-        <div className="h-max p-3">
-          <p className="text-white text-lg font-medium">History : </p>
-          <div>
-            <HistoryTable expensesData={transformedData}/>
-          </div>
-        </div>
+       
+        
       </div>
     );
     
