@@ -298,8 +298,8 @@ const Home = () => {
                         <div className="bg-[rgb(48,48,48)] w-[192%] h-max pb-[31.5%]">
                             <div className="pt-5">
                                     <div className="text-[#b1b1b1] text-sm flex flex-row gap-24 mb-[5%]">
-                                        <div>month : November</div>
-                                        <div>year : 2023 </div>
+                                        <div>month : April</div>
+                                        <div>year : 2024 </div>
                                     </div>
                                     <div className=" flex flex-col gap-3">
                                         <p className=" text-white text-lg font-semibold">Total Income : &#8377;{totalIncome}</p>
